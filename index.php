@@ -191,7 +191,7 @@
             <form method="POST" action="login.php">
                 <div class="form-group">
                     <label for="login">Usuário</label>
-                    <input type="text" id="login" name="login" placeholder="Gerente / Consultor de Vendas" autofocus>
+                    <input type="text" id="login" name="login" placeholder="Gerente / Consultor de Vendas / Analista de TI" autofocus>
                 </div>
                 <div class="form-group">
                     <label for="senha">Senha</label>
