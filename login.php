@@ -42,7 +42,7 @@ if (isset($_POST['btn-entrar'])) {
                 header('location:gerente.php');
             } elseif ($dados['nome_perfil'] == 'Consultor de Vendas') {
                 header('location:consultor.php');
-            } elseif ($dados['nome_perfil'] == 'Analista de TI') {
+            } elseif ($dados['nome_perfil'] == 'Analista7 de TI') {
                 header('location:analista.php');
             } else {
                 $_SESSION['erro'] = "Perfil não reconhecido no sistema.";
