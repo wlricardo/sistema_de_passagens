@@ -11,6 +11,9 @@ if (isset($_POST["acao"])) {
     if ($_POST["acao"] == "excluir") {
         excluirCliente();
     }
+    if ($_POST["acao"] == "cancelar") {
+        voltarLoginAnalista();
+    }
 }
 
 /* function abrirBanco()
@@ -32,9 +35,10 @@ function inserirCliente()
     $cpf = $banco->real_escape_string($_POST["cpf"]);   
     $email = $banco->real_escape_string($_POST["email"]);
     $login = $banco->real_escape_string($_POST["login"]);
-    $senha = $banco->real_escape_string($_POST["senha"]);
-        $sql = "INSERT INTO cliente(nome, cpf, email, login, senha)" . " VALUES 
-                ('$nome','$cpf','$email','$login','$senha')";   
+    $senha = md5($banco->real_escape_string($_POST["senha"]));
+    
+    $sql = "INSERT INTO cliente(nome, cpf, email, login, senha)" . " VALUES 
+            ('$nome','$cpf','$email','$login','$senha')";   
 
     $banco->query($sql);
     $banco->close();

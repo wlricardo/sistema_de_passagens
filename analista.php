@@ -107,7 +107,7 @@ if (!$dados) {
                                     <td><?= $cliente["cpf"] ?></td>
                                     <td><?= $cliente["email"] ?></td>
                                     <td><?= $cliente["login"] ?></td>
-                                    <td><?= $cliente["senha"] ?></td>
+                                    <td> ****** </td>
                                     <th>
                                         <form name="alterar" action="alterar_cliente.php" method="POST">
                                             <input type="hidden" name="id" value=<?= $cliente["id"] ?> />
@@ -115,12 +115,12 @@ if (!$dados) {
                                         </form>
                                     </th>
                                     <th>
-                                        <form name="excluir" action="crud.php" method="POST">
+                                        <form name="excluir" action="crud_clientes.php" method="POST">
                                             <input type="hidden" name="id" value=<?= $cliente["id"] ?> />
                                             <input type="hidden" name="acao" value="excluir" />
                                             <button type="submit" name="btn-excluir" class="btn-excluir">Excluir</button>
                                         </form>
-                                    </th>
+                                    </th>                                    
                                 </tr>
                             <?php }
                             ?>
