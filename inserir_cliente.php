@@ -34,7 +34,7 @@
                 <td colspan="2">
                     <input type="hidden" name="acao" value="inserir" />
                     <input type="submit" value="Adicionar" name="enviar" />
-                    <a href="analista.php" style="margin-left: 10px; text-decoration: none; padding: 2px 5px; background: #ddd; color: black; border: 1px solid #aaa; font-size: 13px;">Cancelar</a>
+                    <a href="analista.php" style="margin-left: 10px; text-decoration: bold; padding: 2px 5px; background: #ddd; color: black; border: 1px solid #aaa; font-size: 14px;">Cancelar</a>
                 </td>
             </tr>            
         </tbody>

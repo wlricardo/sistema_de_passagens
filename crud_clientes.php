@@ -32,13 +32,13 @@ function inserirCliente()
     $banco = abrirBanco();
 
     $nome = $banco->real_escape_string($_POST["nome"]);
-    $cpf = $banco->real_escape_string($_POST["cpf"]);   
+    $cpf = $banco->real_escape_string($_POST["cpf"]);
     $email = $banco->real_escape_string($_POST["email"]);
     $login = $banco->real_escape_string($_POST["login"]);
     $senha = md5($banco->real_escape_string($_POST["senha"]));
-    
+
     $sql = "INSERT INTO cliente(nome, cpf, email, login, senha)" . " VALUES 
-            ('$nome','$cpf','$email','$login','$senha')";   
+            ('$nome','$cpf','$email','$login','$senha')";
 
     $banco->query($sql);
     $banco->close();
@@ -54,7 +54,7 @@ function excluirCliente()
     voltarLoginAnalista();
 }
 
-function SelecionarClienteId($id)
+function selecionarClienteId($id)
 {
     $banco = abrirBanco();
     $sql = "select * from cliente where id=" . $id;
@@ -66,11 +66,30 @@ function SelecionarClienteId($id)
 function alterarCliente()
 {
     $banco = abrirBanco();
-    
-    $sql = "UPDATE cliente SET 
-                   nome='{$_POST["nome"]}', cpf='{$_POST["cpf"]}', email='{$_POST["email"]}',
-                   login='{$_POST["login"]}', senha='{$_POST["senha"]}'
-            WHERE id='{$_POST["id"]}'";
+
+    // Captura e limpa os dados textuais enviados pelo formulário
+    $id    = $banco->real_escape_string($_POST["id"]);
+    $nome  = $banco->real_escape_string($_POST["nome"]);
+    $cpf   = $banco->real_escape_string($_POST["cpf"]);
+    $email = $banco->real_escape_string($_POST["email"]);
+    $login = $banco->real_escape_string($_POST["login"]);
+
+    // Captura a senha sem limpar ainda, para testar se está vazia
+    $senha_digitada = $_POST["senha"];
+
+    // Evitar que atualize a senha para um valor vazio
+    if (empty($senha_digitada)) { // Se estiver vazia, atualiza TODOS os campos, EXCETO a senha
+        $sql = "UPDATE cliente SET 
+                       nome='$nome', cpf='$cpf', email='$email', login='$login'
+                WHERE id='$id'";
+    } else { // Se digitou algo, limpa o texto e aplica a criptografia MD5        
+        $senha_cripto = md5($banco->real_escape_string($senha_digitada));
+
+        // Inclui a nova senha criptografada na consulta SQL
+        $sql = "UPDATE cliente SET 
+                       nome='$nome', cpf='$cpf', email='$email', login='$login', senha='$senha_cripto'
+                WHERE id='$id'";
+    }
 
     $banco->query($sql);
     $banco->close();
