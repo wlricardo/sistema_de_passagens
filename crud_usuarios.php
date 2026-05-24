@@ -4,63 +4,101 @@ require_once 'conexao.php';
 if (isset($_POST["acao"])) {
     if ($_POST["acao"] == "inserir") {
         inserirUsuario();
-    }
+        }
     if ($_POST["acao"] == "alterar") {
         alterarUsuario();
     }
     if ($_POST["acao"] == "excluir") {
         excluirUsuario();
     }
+    if ($_POST["acao"] == "cancelar") {
+        voltarLoginAnalista();
+    }
 }
 
-/* function abrirBanco()
+/*function inserirUsuario()
 {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db_name = "sistema_venda_passagens";
+    $banco = abrirBanco();
 
-    $conexao = new mysqli($servername, $username, $password, $db_name);
-    return $conexao;
+    $nome = $banco->real_escape_string($_POST["nome"]);
+    $cpf = $banco->real_escape_string($_POST["cpf"]);
+    $email = $banco->real_escape_string($_POST["email"]);
+    $login = $banco->real_escape_string($_POST["login"]);
+    $senha = md5($banco->real_escape_string($_POST["senha"]));
+
+    $sql = "INSERT INTO usuario(nome, cpf, email, login, senha)" . " VALUES 
+            ('$nome','$cpf','$email','$login','$senha')";
+
+    $banco->query($sql);
+    $banco->close();
+    voltarLoginAnalista();
 }*/
 
 function inserirUsuario()
 {
     $banco = abrirBanco();
-    $sql = "INSERT INTO cliente(id, nome, cpf, email, login, senha)" . " VALUES 
-            ({$_POST["nome"]}','{$_POST["cpf"]}','{$_POST["email"]}',
-            '{$_POST["login"]}','{$_POST["senha"]}')";
+
+    // Captura e limpa os campos da tabela usuario
+    $nome      = $banco->real_escape_string($_POST["nome"]);
+    $login     = $banco->real_escape_string($_POST["login"]);
+    $senha     = md5($banco->real_escape_string($_POST["senha"]));
+    
+    // Captura o ID do perfil selecionado no menu suspenso (1, 2 ou 3)
+    $perfil_id = $banco->real_escape_string($_POST["perfil_id"]);
+
+    // CORREÇÃO: SQL ajustado com as colunas corretas da tabela usuario
+    $sql = "INSERT INTO usuario (nome, login, senha, perfil_id) 
+            VALUES ('$nome', '$login', '$senha', '$perfil_id')";
 
     $banco->query($sql);
     $banco->close();
     voltarLoginAnalista();
 }
+
 
 function excluirUsuario()
 {
     $banco = abrirBanco();
-    $sql = "delete from cliente where id='{$_POST["id"]}'";
+    $sql = "delete from usuario where id='{$_POST["id"]}'";
     $banco->query($sql);
     $banco->close();
     voltarLoginAnalista();
 }
 
-function SelecionarUsuarioId($id)
+function selecionarUsuarioId($id)
 {
     $banco = abrirBanco();
-    $sql = "select * from cliente where id=" . $id;
+    $sql = "select * from usuario where id=" . $id;
     $resultado = $banco->query($sql);
-    $cliente = mysqli_fetch_assoc($resultado);
-    return $cliente;
+    $usuario = mysqli_fetch_assoc($resultado);
+    return $usuario;
 }
 
 function alterarUsuario()
 {
     $banco = abrirBanco();
-    $sql = "UPDATE cliente SET 
-                   nome='{$_POST["nome"]}', cpf='{$_POST["cpf"]}', email='{$_POST["email"]}',
-                   login='{$_POST["login"]}', senha='{$_POST["senha"]}'
-            WHERE id='{$_POST["id"]}'";
+
+    // Captura e limpa os dados textuais enviados pelo formulário
+    $id    = $banco->real_escape_string($_POST["id"]);
+    $nome  = $banco->real_escape_string($_POST["nome"]);
+    $login = $banco->real_escape_string($_POST["login"]);
+
+    // Captura a senha sem limpar ainda, para testar se está vazia
+    $senha_digitada = $_POST["senha"];
+
+    // Evitar que atualize a senha para um valor vazio
+    if (empty($senha_digitada)) { // Se estiver vazia, atualiza TODOS os campos, EXCETO a senha
+        $sql = "UPDATE usuario SET 
+                       nome='$nome', login='$login'
+                WHERE id='$id'";
+    } else { // Se digitou algo, limpa o texto e aplica a criptografia MD5        
+        $senha_cripto = md5($banco->real_escape_string($senha_digitada));
+
+        // Inclui a nova senha criptografada na consulta SQL
+        $sql = "UPDATE usuario SET 
+                       nome='$nome', login='$login', senha='$senha_cripto'
+                WHERE id='$id'";
+    }
 
     $banco->query($sql);
     $banco->close();
@@ -71,7 +109,7 @@ function alterarUsuario()
 {
     $usuarios_list = [];
     $banco = abrirBanco();
-    $sql = "select * from cliente order by nome";
+    $sql = "select * from usuario order by nome";
     $resultado = $banco->query($sql);
     while ($row = mysqli_fetch_array($resultado)) {
         $usuarios_list[] = $row;
@@ -79,60 +117,23 @@ function alterarUsuario()
     return $usuarios_list;
 }*/
 
-function listarUsuarios() {
+function listarUsuarios()
+{
     $usuarios_list = [];
-    $connect = abrirBanco();
+    $banco = abrirBanco();
+    
+    // Exibe lista de usuários com o nome do perfil, usando JOIN para relacionar as tabelas usuario e perfil
     $sql = "SELECT usuario.*, perfil.nome AS nome_perfil 
             FROM usuario 
-            INNER JOIN perfil ON usuario.perfil_id = perfil.id";
-    $resultado = mysqli_query($connect, $sql);
+            INNER JOIN perfil ON usuario.perfil_id = perfil.id 
+            ORDER BY usuario.nome";
+            
+    $resultado = $banco->query($sql);
+    
     while ($row = mysqli_fetch_array($resultado)) {
         $usuarios_list[] = $row;
     }
+    
+    $banco->close();
     return $usuarios_list;
 }
-
-
-/*
-function buscarConsumoAcimaDaMedia()
-{
-    $banco = abrirBanco();
-    // O SQL compara o consumo de cada cliente com a média calculada na hora
-    $sql = "SELECT * FROM cliente 
-            WHERE kwhConsumido > " . calcularMediaDeConsumo() . " ORDER BY kwhConsumido DESC";
-
-    return $banco->query($sql);
-}
-
-function calcularMediaDeConsumo()
-{
-    $banco = abrirBanco();
-    $sql = "SELECT AVG(kwhConsumido) as media FROM cliente";
-    $resultado = $banco->query($sql);
-    $linha = $resultado->fetch_assoc();
-    return $linha['media'];
-}
-
-function totalCliente()
-{
-    $banco = abrirBanco();
-    $sql = "SELECT COUNT(*) as total FROM cliente";
-    $resultado = $banco->query($sql);
-    $linha = $resultado->fetch_assoc();
-    return $linha['total'];
-}
-
-function voltarIndex()
-{
-    header("Location:index.php");
-}
-
-function voltarConectado()
-{
-    header("Location:conectado.php");
-}
-
-function voltarLoginAnalista()
-{
-    header("Location:analista.php");
-}*/

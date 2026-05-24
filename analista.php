@@ -95,8 +95,6 @@ if (!$dados) {
                                 <th>Email</th>
                                 <th>Login</th>
                                 <th>Senha</th>
-                                <th>Editar</th>
-                                <th>Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -141,7 +139,7 @@ if (!$dados) {
             <section class="table-section">
                 <h3>📊 Usuários cadastrados </h3>
                 <div class="table-placeholder">
-                    <form name="inserir" action="inserir_cliente.php" method="POST">
+                    <form name="inserir" action="inserir_usuario.php" method="POST">
                         <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
                     </form>
                     <table border="1">

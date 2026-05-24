@@ -5,6 +5,9 @@ $cliente = selecionarClienteId($_POST["id"]);
 
 ?>
 <meta charset="UTF-8">
+
+<h3>📋 Atualizar dados do cliente </h3>
+
 <form name="dadosCliente" action="crud_clientes.php" method="POST">
     <table border="1">
 
