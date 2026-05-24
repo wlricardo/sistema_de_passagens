@@ -1,4 +1,5 @@
 <?php
+require_once 'conexao.php';
 
 if (isset($_POST["acao"])) {
     if ($_POST["acao"] == "inserir") {
@@ -12,7 +13,7 @@ if (isset($_POST["acao"])) {
     }
 }
 
-function abrirBanco()
+/* function abrirBanco()
 {
     $servername = "localhost";
     $username = "root";
@@ -21,7 +22,7 @@ function abrirBanco()
 
     $conexao = new mysqli($servername, $username, $password, $db_name);
     return $conexao;
-}
+}*/
 
 function inserirUsuario()
 {
@@ -66,7 +67,7 @@ function alterarUsuario()
     voltarLoginAnalista();
 }
 
-function listarUsuarios()
+/*function listarUsuarios()
 {
     $usuarios_list = [];
     $banco = abrirBanco();
@@ -76,7 +77,21 @@ function listarUsuarios()
         $usuarios_list[] = $row;
     }
     return $usuarios_list;
+}*/
+
+function listarUsuarios() {
+    $usuarios_list = [];
+    $connect = abrirBanco();
+    $sql = "SELECT usuario.*, perfil.nome AS nome_perfil 
+            FROM usuario 
+            INNER JOIN perfil ON usuario.perfil_id = perfil.id";
+    $resultado = mysqli_query($connect, $sql);
+    while ($row = mysqli_fetch_array($resultado)) {
+        $usuarios_list[] = $row;
+    }
+    return $usuarios_list;
 }
+
 
 /*
 function buscarConsumoAcimaDaMedia()
@@ -106,22 +121,18 @@ function totalCliente()
     $linha = $resultado->fetch_assoc();
     return $linha['total'];
 }
-*/
-
 
 function voltarIndex()
 {
     header("Location:index.php");
 }
 
-/*
 function voltarConectado()
 {
     header("Location:conectado.php");
 }
-*/
 
 function voltarLoginAnalista()
 {
-    header("Location:login_analista.php");
-}
+    header("Location:analista.php");
+}*/

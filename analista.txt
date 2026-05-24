@@ -81,7 +81,7 @@ if (!$dados) {
             <section class="table-section">
                 <h3>📊 Clientes cadastrados </h3>
                 <div class="table-placeholder">
-                    <form name="inserir" action="inserir_cliente.php" method="POST">
+                    <form name="inserir" action="inserir.php" method="POST">
                         <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
                         <!--<input type="submit" value="Inserir" name="inserir">
                         <a href="inserir.php"> Adicionar Cliente</a>-->
@@ -141,9 +141,6 @@ if (!$dados) {
             <section class="table-section">
                 <h3>📊 Usuários cadastrados </h3>
                 <div class="table-placeholder">
-                    <form name="inserir" action="inserir_cliente.php" method="POST">
-                        <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
-                    </form>
                     <table border="1">
                         <thead>
                             <tr>

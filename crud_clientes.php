@@ -1,4 +1,5 @@
 <?php
+require_once 'conexao.php';
 
 if (isset($_POST["acao"])) {
     if ($_POST["acao"] == "inserir") {
@@ -12,7 +13,7 @@ if (isset($_POST["acao"])) {
     }
 }
 
-function abrirBanco()
+/* function abrirBanco()
 {
     $servername = "localhost";
     $username = "root";
@@ -21,14 +22,19 @@ function abrirBanco()
 
     $conexao = new mysqli($servername, $username, $password, $db_name);
     return $conexao;
-}
+}*/
 
 function inserirCliente()
 {
     $banco = abrirBanco();
-    $sql = "INSERT INTO cliente(id, nome, cpf, email, login, senha)" . " VALUES 
-            ({$_POST["nome"]}','{$_POST["cpf"]}','{$_POST["email"]}',
-            '{$_POST["login"]}','{$_POST["senha"]}')";
+
+    $nome = $banco->real_escape_string($_POST["nome"]);
+    $cpf = $banco->real_escape_string($_POST["cpf"]);   
+    $email = $banco->real_escape_string($_POST["email"]);
+    $login = $banco->real_escape_string($_POST["login"]);
+    $senha = $banco->real_escape_string($_POST["senha"]);
+        $sql = "INSERT INTO cliente(nome, cpf, email, login, senha)" . " VALUES 
+                ('$nome','$cpf','$email','$login','$senha')";   
 
     $banco->query($sql);
     $banco->close();
@@ -109,19 +115,18 @@ function totalCliente()
 */
 
 
-function voltarIndex()
+/*function voltarIndex()
 {
     header("Location:index.php");
 }
 
-/*
+
 function voltarConectado()
 {
     header("Location:conectado.php");
 }
-*/
 
 function voltarLoginAnalista()
 {
-    header("Location:login_analista.php");
-}
+    header("Location:analista.php");
+}*/
