@@ -15,18 +15,18 @@ if (mysqli_connect_error()) {
 
 if (isset($_POST['btn-entrar'])) {
     $login = mysqli_real_escape_string($connect, $_POST['login']);
-    $senha = mysqli_real_escape_string($connect, $_POST['senha']);
+    $senha = md5(mysqli_real_escape_string($connect, $_POST['senha']));
 
     if (empty($login) or empty($senha)) {
         $_SESSION['erro'] = 'Favor preencher os dados';
         header('location:index.php');
         exit();
     } else {
-        $senha_hash = md5($senha);
+        //$senha_hash = md5($senha);
         $sql = "SELECT u.*, p.nome AS nome_perfil FROM usuario u 
                 INNER JOIN perfil p ON u.perfil_id = p.id 
-                WHERE u.login = '$login' AND u.senha = '$senha_hash'";
-        // $sql = "select * from usuario where login = '$login' and senha = '$senha_hash'";
+                WHERE u.login = '$login' AND u.senha = '$senha'";
+        // $sql = "select * from usuario where login = '$login' and senha = '$senha'";
 
         $resultado = mysqli_query($connect, $sql);
 

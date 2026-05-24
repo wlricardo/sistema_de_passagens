@@ -66,6 +66,7 @@ function SelecionarClienteId($id)
 function alterarCliente()
 {
     $banco = abrirBanco();
+    
     $sql = "UPDATE cliente SET 
                    nome='{$_POST["nome"]}', cpf='{$_POST["cpf"]}', email='{$_POST["email"]}',
                    login='{$_POST["login"]}', senha='{$_POST["senha"]}'

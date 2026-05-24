@@ -82,9 +82,9 @@ if (!$dados) {
                 <h3>📊 Clientes cadastrados </h3>
                 <div class="table-placeholder">
                     <form name="inserir" action="inserir_cliente.php" method="POST">
-                        <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
-                        <!--<input type="submit" value="Inserir" name="inserir">
-                        <a href="inserir.php"> Adicionar Cliente</a>-->
+                         <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
+                        <!-- <a href="inserir_cliente.php"> Adicionar Cliente</a> 
+                        <input type="submit" value="Inserir" name="inserir"> -->
                     </form>
 
                     <table border="1">
