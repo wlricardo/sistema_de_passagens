@@ -2,8 +2,12 @@
 require_once 'login.php';
 include 'crud_clientes.php';
 include 'crud_usuarios.php';
+include 'crud_veiculos.php';
+include 'crud_rotas.php';
 $clientes = listarClientes();
 $usuarios = listarUsuarios();
+$veiculos = listarVeiculos();
+$rotas = listarRotas();
 
 // Impede acesso direto à página sem estar logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
@@ -48,7 +52,7 @@ if (!$dados) {
     <!-- ===== HEADER ===== -->
     <header class="page-header">
         <div>
-            <h1>Sistema de Vá com Deus Passagens Rodoviárias</h1>
+            <h1>Sistema Vá com Deus de Passagens Rodoviárias</h1>
             <p>Painel do Usuário</p>
         </div>
     </header>
@@ -82,7 +86,7 @@ if (!$dados) {
                 <h3>📊 Clientes cadastrados </h3>
                 <div class="table-placeholder">
                     <form name="inserir" action="inserir_cliente.php" method="POST">
-                         <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
+                        <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
                         <!-- <a href="inserir_cliente.php"> Adicionar Cliente</a> 
                         <input type="submit" value="Inserir" name="inserir"> -->
                     </form>
@@ -118,7 +122,7 @@ if (!$dados) {
                                             <input type="hidden" name="acao" value="excluir" />
                                             <button type="submit" name="btn-excluir" class="btn-excluir">Excluir</button>
                                         </form>
-                                    </th>                                    
+                                    </th>
                                 </tr>
                             <?php }
                             ?>
@@ -179,6 +183,111 @@ if (!$dados) {
                     </table>
                 </div>
             </section>
+
+            <!-- ==== TABELA DE VEÍCULOS ==== -->
+            <section class="table-section">
+                <h3>📊 Veículos cadastrados </h3>
+                <div class="table-placeholder">
+                    <form name="inserir" action="inserir_veiculo.php" method="POST">
+                        <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
+                    </form>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Poltrona</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($veiculos as $veiculo) { ?>
+                                <tr>
+                                    <td><?= $veiculo["marca"] ?></td>
+                                    <td><?= $veiculo["modelo"] ?></td>
+                                    <td><?= $veiculo["poltrona"] ?></td>
+                                    <td><?= $veiculo["tipo"] ?></td>
+                                    <th>
+                                        <form name="alterar" action="alterar_veiculo.php" method="POST">
+                                            <input type="hidden" name="id" value=<?= $veiculo["id"] ?> />
+                                            <button type="submit" name="btn-editar" class="btn-editar">Editar</button>
+                                        </form>
+                                    </th>
+                                    <th>
+                                        <form name="excluir" action="crud_veiculos.php" method="POST">
+                                            <input type="hidden" name="id" value=<?= $veiculo["id"] ?> />
+                                            <input type="hidden" name="acao" value="excluir" />
+                                            <button type="submit" name="btn-excluir" class="btn-excluir">Excluir</button>
+                                        </form>
+                                    </th>
+                                </tr>
+                            <?php }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==== TABELA DE ROTAS ==== -->
+             <section class="table-section">
+                <h3>📊 Rotas cadastradas </h3>
+                <div class="table-placeholder">
+                    <form name="inserir" action="inserir_rota.php" method="POST">
+                        <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
+                    </form>
+
+<!--
+id
+nome
+cidade_origem_id
+cidade_destino_id
+tempo_viagem
+valor_base
+-->
+
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Cidade de Origem</th>
+                                <th>Cidade de Destino</th>
+                                <th>Tempo de Viagem</th>
+                                <th>Valor Base</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($rotas as $rota) { ?>
+                                <tr>
+                                    <td><?= $rota["nome"] ?></td>
+                                    <td><?= $rota["cidade_origem"] ?></td>
+                                    <td><?= $rota["cidade_destino"] ?></td>
+                                    <td><?= $rota["tempo_viagem"] ?></td>
+                                    <td><?= $rota["valor_base"] ?></td>
+                                    <th>
+                                        <form name="alterar" action="alterar_rota.php" method="POST">
+                                            <input type="hidden" name="id" value=<?= $rota["id"] ?> />
+                                            <button type="submit" name="btn-editar" class="btn-editar">Editar</button>
+                                        </form>
+                                    </th>
+                                    <th>
+                                        <form name="excluir" action="crud_rotas.php" method="POST">
+                                            <input type="hidden" name="id" value=<?= $rota["id"] ?> />
+                                            <input type="hidden" name="acao" value="excluir" />
+                                            <button type="submit" name="btn-excluir" class="btn-excluir">Excluir</button>
+                                        </form>
+                                    </th>
+                                </tr>
+                            <?php }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+
 
         </div>
     </main>

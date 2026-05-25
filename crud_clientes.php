@@ -2,18 +2,10 @@
 require_once 'conexao.php';
 
 if (isset($_POST["acao"])) {
-    if ($_POST["acao"] == "inserir") {
-        inserirCliente();
-    }
-    if ($_POST["acao"] == "alterar") {
-        alterarCliente();
-    }
-    if ($_POST["acao"] == "excluir") {
-        excluirCliente();
-    }
-    if ($_POST["acao"] == "cancelar") {
-        voltarLoginAnalista();
-    }
+    if ($_POST["acao"] == "inserir") { inserirCliente(); }
+    if ($_POST["acao"] == "alterar") { alterarCliente(); }
+    if ($_POST["acao"] == "excluir") { excluirCliente(); }
+    if ($_POST["acao"] == "cancelar") { voltarLoginAnalista(); }
 }
 
 /* function abrirBanco()
