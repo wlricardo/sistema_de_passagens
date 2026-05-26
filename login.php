@@ -41,7 +41,7 @@ if (isset($_POST['btn-entrar'])) {
             if ($dados['nome_perfil'] == 'Gerente') {
                 header('location:gerente.php');
             } elseif ($dados['nome_perfil'] == 'Consultor de Vendas') {
-                header('location:consultor.php');
+                header('location:vendas.php');
             } elseif ($dados['nome_perfil'] == 'Analista de TI') {
                 header('location:analista.php');
             } else {

@@ -236,16 +236,6 @@ if (!$dados) {
                     <form name="inserir" action="inserir_rota.php" method="POST">
                         <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
                     </form>
-
-<!--
-id
-nome
-cidade_origem_id
-cidade_destino_id
-tempo_viagem
-valor_base
--->
-
                     <table border="1">
                         <thead>
                             <tr>
@@ -261,8 +251,8 @@ valor_base
                             foreach ($rotas as $rota) { ?>
                                 <tr>
                                     <td><?= $rota["nome"] ?></td>
-                                    <td><?= $rota["cidade_origem"] ?></td>
-                                    <td><?= $rota["cidade_destino"] ?></td>
+                                    <td><?= $rota["origem"] ?></td>
+                                    <td><?= $rota["destino"] ?></td>
                                     <td><?= $rota["tempo_viagem"] ?></td>
                                     <td><?= $rota["valor_base"] ?></td>
                                     <th>

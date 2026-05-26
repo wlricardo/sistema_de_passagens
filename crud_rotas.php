@@ -19,7 +19,7 @@ function inserirRota() {
             VALUES ('$nome', '$origem', '$destino', '$tempo', '$valor')";
     $banco->query($sql);
     $banco->close();
-    header("Location:analista.php");
+    header("Location:vendas.php");
 }
 
 function alterarRota() {
@@ -34,7 +34,7 @@ function alterarRota() {
     $sql = "UPDATE rota SET nome='$nome', cidade_origem_id='$origem', cidade_destino_id='$destino', tempo_viagem='$tempo', valor_base='$valor' WHERE id='$id'";
     $banco->query($sql);
     $banco->close();
-    header("Location:analista.php");
+    header("Location:vendas.php");
 }
 
 function excluirRota() {
@@ -43,7 +43,7 @@ function excluirRota() {
     $sql = "DELETE FROM rota WHERE id='$id'";
     $banco->query($sql);
     $banco->close();
-    header("Location:analista.php");
+    header("Location:vendas.php");
 }
 
 function selecionarRotaId($id) {
@@ -58,7 +58,7 @@ function selecionarRotaId($id) {
 function listarRotas() {
     $rotas = [];
     $banco = abrirBanco();
-    // INNER JOIN duplo para conseguir trazer de forma correta o nome legível da cidade de origem e destino
+    // Obter os nomes das cidades de origem e destino
     $sql = "SELECT r.*, o.nome AS origem, d.nome AS destino 
             FROM rota r
             INNER JOIN cidade o ON r.cidade_origem_id = o.id
