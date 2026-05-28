@@ -4,10 +4,12 @@ include 'crud_clientes.php';
 include 'crud_usuarios.php';
 include 'crud_veiculos.php';
 include 'crud_rotas.php';
+include 'crud_cidades.php';
 $clientes = listarClientes();
 $usuarios = listarUsuarios();
 $veiculos = listarVeiculos();
 $rotas = listarRotas();
+$cidades = listarCidades();
 
 // Impede acesso direto à página sem estar logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
@@ -276,8 +278,45 @@ if (!$dados) {
                 </div>
             </section>
 
-        </div>
-
+            <!-- ==== TABELA DE CIDADES ==== -->
+             <section class="table-section">
+                <h3>📊 Cidades cadastradas </h3>
+                <div class="table-placeholder">
+                    <form name="inserir" action="inserir_cidade.php" method="POST">
+                        <button type="submit" name="btn-inserir" class="btn-inserir">Inserir</button>
+                    </form>
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($cidades as $cidade) { ?>
+                                <tr>
+                                    <td><?= $cidade["nome_cidade"] ?></td>
+                                    <td><?= $cidade["uf"] ?></td>
+                                    <th>
+                                        <form name="alterar" action="alterar_cidade.php" method="POST">
+                                            <input type="hidden" name="id" value=<?= $cidade["id"] ?> />
+                                            <button type="submit" name="btn-editar" class="btn-editar">Editar</button>
+                                        </form>
+                                    </th>
+                                    <th>
+                                        <form name="excluir" action="crud_cidades.php" method="POST">
+                                            <input type="hidden" name="id" value=<?= $cidade["id"] ?> />
+                                            <input type="hidden" name="acao" value="excluir" />
+                                            <button type="submit" name="btn-excluir" class="btn-excluir">Excluir</button>
+                                        </form>
+                                    </th>
+                                </tr>
+                            <?php }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
     </main>

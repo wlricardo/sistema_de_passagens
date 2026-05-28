@@ -16,23 +16,6 @@ if (isset($_POST["acao"])) {
     }
 }
 
-/*function inserirUsuario()
-{
-    $banco = abrirBanco();
-
-    $nome = $banco->real_escape_string($_POST["nome"]);
-    $cpf = $banco->real_escape_string($_POST["cpf"]);
-    $email = $banco->real_escape_string($_POST["email"]);
-    $login = $banco->real_escape_string($_POST["login"]);
-    $senha = md5($banco->real_escape_string($_POST["senha"]));
-
-    $sql = "INSERT INTO usuario(nome, cpf, email, login, senha)" . " VALUES 
-            ('$nome','$cpf','$email','$login','$senha')";
-
-    $banco->query($sql);
-    $banco->close();
-    voltarLoginAnalista();
-}*/
 
 function inserirUsuario()
 {
