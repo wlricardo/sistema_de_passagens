@@ -2,7 +2,9 @@
 require_once 'login.php';
 include 'crud_clientes.php';
 include 'crud_viagens.php';
+include 'crud_reservas.php';
 
+$historico_vendas = listarHistoricoReservas($_SESSION['id_usuario']);
 $clientes = listarClientes();
 $viagens_disponiveis = listarViagens();
 
@@ -70,13 +72,13 @@ if ($dados['perfil_id'] != 2) {
                 </div>
             </aside>
 
-            <!-- ===== TABELA DE CLIENTES (COM GESTÃO COMPLETA) ===== -->
+            <!-- ===== TABELA DE CLIENTES (CRUD) ===== -->
             <section class="table-section">
                 <h3>📊 Clientes cadastrados</h3>
                 <div class="table-placeholder">
                     <!-- Botão Inserir Cliente -->
                     <form name="inserir" action="inserir_cliente.php" method="POST">
-                        <!-- Enviamos a origem para o formulário saber para onde voltar se o usuário cancelar -->
+                        <!-- Volta para o perfil de vendas se o usuário cancelar -->
                         <input type="hidden" name="origem" value="vendas.php" />
                         <button type="submit" name="btn-inserir" class="btn-inserir">Inserir Novo Cliente</button>
                     </form>
@@ -165,6 +167,49 @@ if ($dados['perfil_id'] != 2) {
                     </table>
                 </div>
             </section>
+
+            <!-- ==== HISTÓRICO DE VENDAS DO CONSULTOR ==== -->
+            <section class="table-section">
+                <h3>📜 Meus Bilhetes Emitidos (Histórico de Vendas)</h3>
+                <div class="table-placeholder">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Nº Bilhete</th>
+                                <th>Data/Hora Emissão</th>
+                                <th>Cliente / Passageiro</th>
+                                <th>Rota / Linha</th>
+                                <th>Data Embarque</th>
+                                <th>Pagamento</th>
+                                <th>Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($historico_vendas)): ?>
+                                <tr>
+                                    <td colspan="7" align="center">Você ainda não realizou nenhuma venda hoje.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($historico_vendas as $reserva): ?>
+                                    <tr>
+                                        <td>#<?= $reserva["reserva_id"] ?></td>
+                                        <td><?= date('d/m/Y H:i', strtotime($reserva["data_venda"])) ?></td>
+                                        <td><?= htmlspecialchars($reserva["nome_cliente"]) ?></td>
+                                        <td><?= htmlspecialchars($reserva["nome_rota"]) ?></td>
+                                        <td><?= date('d/m/Y', strtotime($reserva["data_viagem"])) ?></td>
+                                        <td>
+                                            <?= strtoupper($reserva["forma_pagamento"]) ?>
+                                            <?= $reserva["forma_pagamento"] == 'cartao' ? "({$reserva['parcelas']}x)" : "" ?>
+                                        </td>
+                                        <td style="color: green; font-weight: bold;">R$ <?= number_format($reserva["valor_pago"], 2, ',', '.') ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
 
         </div>
     </main>
