@@ -5,11 +5,13 @@ include 'crud_usuarios.php';
 include 'crud_veiculos.php';
 include 'crud_rotas.php';
 include 'crud_cidades.php';
+include 'crud_viagens.php';
 $clientes = listarClientes();
 $usuarios = listarUsuarios();
 $veiculos = listarVeiculos();
 $rotas = listarRotas();
 $cidades = listarCidades();
+$viagens = listarViagens();
 
 // Impede acesso direto à página sem estar logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
@@ -232,7 +234,7 @@ if (!$dados) {
             </section>
 
             <!-- ==== TABELA DE ROTAS ==== -->
-             <section class="table-section">
+            <section class="table-section">
                 <h3>📊 Rotas cadastradas </h3>
                 <div class="table-placeholder">
                     <form name="inserir" action="inserir_rota.php" method="POST">
@@ -279,7 +281,7 @@ if (!$dados) {
             </section>
 
             <!-- ==== TABELA DE CIDADES ==== -->
-             <section class="table-section">
+            <section class="table-section">
                 <h3>📊 Cidades cadastradas </h3>
                 <div class="table-placeholder">
                     <form name="inserir" action="inserir_cidade.php" method="POST">
@@ -317,7 +319,67 @@ if (!$dados) {
                         </tbody>
                     </table>
                 </div>
+            </section>
 
+            <!-- ==== TABELA DE VIAGENS PROGRAMADAS ==== -->
+            <section class="table-section">
+                <h3>📊 Viagens programadas</h3>
+                <div class="table-placeholder">
+                    <!-- Botão para abrir o formulário de cadastro de viagens -->
+                    <form name="inserirViagem" action="inserir_viagem.php" method="POST">
+                        <button type="submit" name="btn-inserir" class="btn-inserir">Programar Nova Viagem</button>
+                    </form>
+
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Rota / Linha</th>
+                                <th>Veículo (Modelo - Tipo)</th>
+                                <th>Data da Viagem</th>
+                                <th>Valor da Passagem</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($viagens)): ?>
+                                <tr>
+                                    <td colspan="6" align="center">Nenhuma viagem programada no sistema.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($viagens as $viagem): ?>
+                                    <tr>
+                                        <td><?= $viagem["id"] ?></td>
+                                        <td><?= htmlspecialchars($viagem["nome_rota"]) ?></td>
+                                        <td><?= htmlspecialchars($viagem["modelo_veiculo"] . " (" . $viagem["tipo_veiculo"] . ")") ?></td>
+                                        <td><?= date('d/m/Y', strtotime($viagem["data"])) ?></td>
+                                        <td>R$ <?= number_format($viagem["valor"], 2, ',', '.') ?></td>
+
+                                        <!-- BOTÕES DE AÇÃO DO ANALISTA -->
+                                        <td>
+                                            <div style="display: flex; gap: 5px;">
+                                                <!-- Formulário de Edição -->
+                                                <form name="alterarViagem" action="alterar_viagem.php" method="POST" style="margin:0;">
+                                                    <input type="hidden" name="id" value="<?= $viagem["id"] ?>" />
+                                                    <button type="submit" name="btn-editar" class="btn-editar">Editar</button>
+                                                </form>
+
+                                                <!-- Formulário de Exclusão -->
+                                                <form name="excluirViagem" action="crud_viagens.php" method="POST" style="margin:0;">
+                                                    <input type="hidden" name="id" value="<?= $viagem["id"] ?>" />
+                                                    <input type="hidden" name="acao" value="excluir" />
+                                                    <button type="submit" name="btn-excluir" class="btn-excluir" onclick="return confirm('Deseja realmente apagar esta viagem?')">Excluir</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+
+                    </table>
+                </div>
+            </section>
         </div>
     </main>
 

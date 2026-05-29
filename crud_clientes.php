@@ -2,10 +2,19 @@
 require_once 'conexao.php';
 
 if (isset($_POST["acao"])) {
-    if ($_POST["acao"] == "inserir") { inserirCliente(); }
-    if ($_POST["acao"] == "alterar") { alterarCliente(); }
-    if ($_POST["acao"] == "excluir") { excluirCliente(); }
-    if ($_POST["acao"] == "cancelar") { voltarLoginAnalista(); }
+    if ($_POST["acao"] == "inserir") {
+        inserirCliente();
+    }
+    if ($_POST["acao"] == "alterar") {
+        alterarCliente();
+    }
+    if ($_POST["acao"] == "excluir") {
+        excluirCliente();
+    }
+    if ($_POST["acao"] == "cancelar") {
+        header("Location: vendas.php");
+        exit();
+    }
 }
 
 /* function abrirBanco()
@@ -34,7 +43,11 @@ function inserirCliente()
 
     $banco->query($sql);
     $banco->close();
-    voltarLoginAnalista();
+
+    // Se o perfil logado for o 2 (Vendas), vai para vendas.php, senão volta para analista.php
+    $pagina_retorno = ($_SESSION['perfil_id'] == 2) ? "vendas.php" : "analista.php";
+    header("Location: vendas.php");
+    exit();;
 }
 
 function excluirCliente()
@@ -43,7 +56,11 @@ function excluirCliente()
     $sql = "delete from cliente where id='{$_POST["id"]}'";
     $banco->query($sql);
     $banco->close();
-    voltarLoginAnalista();
+
+    // Se o perfil logado for o 2 (Vendas), vai para vendas.php, senão volta para analista.php
+    $pagina_retorno = ($_SESSION['perfil_id'] == 2) ? "vendas.php" : "analista.php";
+    header("Location: " . $pagina_retorno);
+    exit();
 }
 
 function selecionarClienteId($id)
@@ -85,7 +102,14 @@ function alterarCliente()
 
     $banco->query($sql);
     $banco->close();
-    voltarLoginAnalista();
+
+    // Redireciona de volta à página de vendas, para mostrar a lista atualizada de clientes
+    /*$retorno = (isset($_POST['origem']) && $_POST['origem'] == 'vendas.php') ? 'vendas.php' : 'analista.php';
+    header("Location: " . $retorno);
+    exit();*/
+    $pagina_retorno = ($_SESSION['perfil_id'] == 2) ? "vendas.php" : "analista.php";
+    header("Location: " . $pagina_retorno);
+    exit();
 }
 
 function listarClientes()

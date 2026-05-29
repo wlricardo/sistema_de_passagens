@@ -36,6 +36,7 @@ if (isset($_POST['btn-entrar'])) {
             $_SESSION['logado'] = true;
             $_SESSION["id_usuario"] = $dados['id'];
             $_SESSION["perfil_usuario"] = $dados['nome_perfil']; // Guarda o nome do perfil na sessão
+            $_SESSION['perfil_id'] = $dados['perfil_id']; // Guarda o ID do perfil na sessão para futuras verificações de acesso
 
             // Direcionamento baseado no nome do perfil cadastrado no banco
             if ($dados['nome_perfil'] == 'Gerente') {
