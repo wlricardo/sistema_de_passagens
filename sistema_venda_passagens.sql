@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/05/2026 às 03:10
+-- Tempo de geração: 30/05/2026 às 23:36
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -42,7 +42,10 @@ INSERT INTO `cidade` (`id`, `nome`, `estado_id`) VALUES
 (2, 'Rio de Janeiro', 2),
 (3, 'Curitiba', 3),
 (4, 'Fortaleza', 4),
-(5, 'Recife', 5);
+(5, 'Recife', 5),
+(6, 'Jericoacoara', 4),
+(7, 'Caruaru', 5),
+(8, 'Foz do Iguaçu', 3);
 
 -- --------------------------------------------------------
 
@@ -77,7 +80,9 @@ INSERT INTO `cliente` (`id`, `nome`, `cpf`, `email`, `login`, `senha`) VALUES
 (11, 'Franciclewdson', '123.000.222-77', 'fran@email.com', 'franci', 'caf1a3dfb505ffed0d024130f58c5cfa'),
 (12, 'Maricleydde', '777.666.111-55', 'macle@mail.com', 'mari', 'caf1a3dfb505ffed0d024130f58c5cfa'),
 (18, 'Viviane', '999.666.333-00', 'vivi@maill.com', 'vivi', '202cb962ac59075b964b07152d234b70'),
-(25, 'Willem Ricardo', '159.753.456-11', 'willem@mail.com', 'willem', '81dc9bdb52d04dc20036dbd8313ed055');
+(25, 'Willem Ricardo', '159.753.456-11', 'willem@mail.com', 'willem', '81dc9bdb52d04dc20036dbd8313ed055'),
+(27, 'Giovanna', '444.777.666-00', 'gigi@mail.com', 'gigi', '202cb962ac59075b964b07152d234b70'),
+(28, 'Isabela Hermes', '222.999.444-33', 'bebela@mail.com', 'bela', '202cb962ac59075b964b07152d234b70');
 
 -- --------------------------------------------------------
 
@@ -133,24 +138,28 @@ CREATE TABLE `reserva` (
   `cliente_id` int(11) NOT NULL,
   `viagem_id` int(11) NOT NULL,
   `data` datetime NOT NULL DEFAULT current_timestamp(),
-  `forma_pagamento` enum('Cartao','Pix','Dinheiro') NOT NULL
+  `forma_pagamento` enum('Cartao','Pix','Dinheiro') NOT NULL,
+  `parcelas` int(11) DEFAULT 1,
+  `valor_pago` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Despejando dados para a tabela `reserva`
 --
 
-INSERT INTO `reserva` (`id`, `usuario_id`, `cliente_id`, `viagem_id`, `data`, `forma_pagamento`) VALUES
-(1, 2, 1, 1, '2026-05-10 10:15:00', 'Pix'),
-(2, 2, 2, 2, '2026-05-11 11:30:00', 'Cartao'),
-(3, 2, 3, 3, '2026-05-12 15:45:00', 'Dinheiro'),
-(4, 2, 4, 4, '2026-05-13 09:20:00', 'Pix'),
-(5, 2, 5, 5, '2026-05-14 18:00:00', 'Cartao'),
-(6, 2, 6, 6, '2026-05-15 08:45:00', 'Pix'),
-(7, 2, 7, 7, '2026-05-16 11:10:00', 'Cartao'),
-(8, 2, 8, 8, '2026-05-16 14:25:00', 'Dinheiro'),
-(9, 2, 9, 9, '2026-05-17 16:30:00', 'Pix'),
-(10, 2, 10, 10, '2026-05-18 19:15:00', 'Cartao');
+INSERT INTO `reserva` (`id`, `usuario_id`, `cliente_id`, `viagem_id`, `data`, `forma_pagamento`, `parcelas`, `valor_pago`) VALUES
+(1, 2, 1, 1, '2026-05-10 10:15:00', 'Pix', 1, 0.00),
+(2, 2, 2, 2, '2026-05-11 11:30:00', 'Cartao', 1, 0.00),
+(3, 2, 3, 3, '2026-05-12 15:45:00', 'Dinheiro', 1, 0.00),
+(4, 2, 4, 4, '2026-05-13 09:20:00', 'Pix', 1, 0.00),
+(5, 2, 5, 5, '2026-05-14 18:00:00', 'Cartao', 1, 0.00),
+(6, 2, 6, 6, '2026-05-15 08:45:00', 'Pix', 1, 0.00),
+(7, 2, 7, 7, '2026-05-16 11:10:00', 'Cartao', 1, 0.00),
+(8, 2, 8, 8, '2026-05-16 14:25:00', 'Dinheiro', 1, 0.00),
+(9, 2, 9, 9, '2026-05-17 16:30:00', 'Pix', 1, 0.00),
+(10, 2, 10, 10, '2026-05-18 19:15:00', 'Cartao', 1, 0.00),
+(11, 2, 9, 9, '2026-05-29 03:59:21', 'Cartao', 6, 600.00),
+(12, 2, 27, 12, '2026-05-30 21:32:56', 'Cartao', 5, 832.00);
 
 -- --------------------------------------------------------
 
@@ -181,7 +190,8 @@ INSERT INTO `rota` (`id`, `nome`, `cidade_origem_id`, `cidade_destino_id`, `temp
 (7, 'Recife x Fortaleza', 5, 4, '12:00', 180.00),
 (8, 'Curitiba x Rio de Janeiro', 3, 2, '12:30', 210.00),
 (9, 'São Paulo x Recife', 1, 5, '39:00', 480.00),
-(10, 'Fortaleza x Curitiba', 4, 3, '51:00', 590.00);
+(10, 'Fortaleza x Curitiba', 4, 3, '51:00', 590.00),
+(11, 'Curitiba x Jericoacoara', 3, 6, '50:20', 640.00);
 
 -- --------------------------------------------------------
 
@@ -203,7 +213,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `perfil_id`) VALUES
 (1, 'Adm. Teste', 'admin', '202cb962ac59075b964b07152d234b70', 1),
-(2, 'Vendas Teste', 'user', 'ee11cbb19052e40b07aac0ca060c23ee', 2),
+(2, 'Vendas Teste', 'user', '202cb962ac59075b964b07152d234b70', 2),
 (3, 'TI Teste', 'ti', 'e00fba6fedfb8a49e13346f7099a23fc', 3),
 (4, 'Willem Ricardo', 'wlricardo', '202cb962ac59075b964b07152d234b70', 3);
 
@@ -270,7 +280,8 @@ INSERT INTO `viagem` (`id`, `rota_id`, `veiculo_id`, `data`, `valor`) VALUES
 (7, 7, 12, '2026-06-20 20:15:00', 180.00),
 (8, 8, 13, '2026-06-21 17:00:00', 262.50),
 (9, 9, 14, '2026-06-22 23:30:00', 600.00),
-(10, 10, 15, '2026-06-23 05:00:00', 885.00);
+(10, 10, 15, '2026-06-23 05:00:00', 885.00),
+(12, 11, 5, '2026-12-20 00:00:00', 832.00);
 
 --
 -- Índices para tabelas despejadas
@@ -351,13 +362,13 @@ ALTER TABLE `viagem`
 -- AUTO_INCREMENT de tabela `cidade`
 --
 ALTER TABLE `cidade`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de tabela `estado`
@@ -375,13 +386,13 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de tabela `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de tabela `rota`
 --
 ALTER TABLE `rota`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`
@@ -399,7 +410,7 @@ ALTER TABLE `veiculo`
 -- AUTO_INCREMENT de tabela `viagem`
 --
 ALTER TABLE `viagem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Restrições para tabelas despejadas
