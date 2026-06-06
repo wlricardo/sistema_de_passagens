@@ -1,6 +1,6 @@
 <?php
 include("crud_clientes.php");
-$cliente = selecionarClienteId($_POST["id"]);
+$cliente = selecionarClienteId($_POST["cliente_id"]);
 
 
 ?>

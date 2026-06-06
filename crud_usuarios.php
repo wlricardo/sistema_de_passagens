@@ -38,26 +38,64 @@ function inserirUsuario()
     voltarLoginAnalista();
 }
 
-
 function excluirUsuario()
 {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     $banco = abrirBanco();
-    $id_usuario = $banco->real_escape_string($_POST["usuario_id"]);
+    // Força o PHP a nos mostrar qualquer erro do banco imediatamente
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-    // Em vez de deletar, removemos o perfil de Vendedor/Gerente mudando para algo neutro
-    $sql_usuario = "UPDATE usuario SET perfil_id = NULL WHERE id = '{$id_usuario}'";
-    $banco->query($sql_usuario);
+    try {
+        $id_usuario = $banco->real_escape_string($_POST["usuario_id"]);
 
-    $banco->close();
+        if (empty($id_usuario)) {
+            throw new Exception("O ID do usuário chegou vazio no PHP. Verifique o HTML.");
+        }
 
-    header("Location: analista.php");
-    exit();
+        // 1. Busca o perfil do usuário
+        $sql_busca = "SELECT perfil_id FROM usuario WHERE id = '{$id_usuario}'";
+        $resultado = $banco->query($sql_busca);
+        $usuario_alvo = $resultado->fetch_assoc();
 
-    /*$banco = abrirBanco();
-    $sql = "delete from usuario where id='{$_POST["id"]}'";
-    $banco->query($sql);
-    $banco->close();
-    voltarLoginAnalista();*/
+        if (!$usuario_alvo) {
+            throw new Exception("Usuário com ID {$id_usuario} não foi encontrado no banco de dados.");
+        }
+
+        $perfil_alvo = $usuario_alvo['perfil_id'];
+
+        if ($perfil_alvo == 2) {
+            // Tenta desvincular as reservas do vendedor
+            try {
+                $sql_preservar = "UPDATE reserva SET usuario_id = NULL WHERE usuario_id = '{$id_usuario}'";
+                $banco->query($sql_preservar);
+            } catch (mysqli_sql_exception $e) {
+                // Se cair aqui, a sua tabela 'reserva' não aceita valores NULL na coluna usuario_id
+                throw new Exception("Erro de Banco de Dados: A coluna 'usuario_id' na tabela 'reserva' precisa aceitar valores NULOS (NULL) para podermos preservar o histórico de vendas. Vá no phpMyAdmin, mude a estrutura da tabela 'reserva', marque a coluna usuario_id como 'Nulo/Null' e tente novamente.");
+            }
+        } else {
+            // Remove registros administrativos se houverem
+            $sql_limpar = "DELETE FROM reserva WHERE usuario_id = '{$id_usuario}'";
+            $banco->query($sql_limpar);
+        }
+
+        // 2. Exclui o usuário definitivamente
+        $sql_deletar = "DELETE FROM usuario WHERE id = '{$id_usuario}'";
+        $banco->query($sql_deletar);
+        
+        $banco->close();
+        
+        header("Location: analista.php");
+        exit();
+
+    } catch (Exception $e) {
+        echo "<h3>[Vá com Deus] Erro no fluxo de exclusão:</h3>";
+        echo "<p style='color:red; font-weight:bold;'>" . $e->getMessage() . "</p>";
+        echo "<br><a href='analista.php'>Voltar para o Painel</a>";
+        exit();
+    }
 }
 
 function selecionarUsuarioId($id)

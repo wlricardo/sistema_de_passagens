@@ -31,6 +31,7 @@ function inserirCliente()
             VALUES ('$nome', '$cpf', '$email', '$login', '$senha')";
 
     $banco->query($sql);
+    $banco->commit();
     $banco->close();
 
     // Verifica qual o perfil logado
@@ -110,6 +111,7 @@ function alterarCliente()
     }
 
     $banco->query($sql);
+    $banco->commit();
     $banco->close();
 
     // Redireciona de volta à página de vendas, para mostrar a lista atualizada de clientes
@@ -132,50 +134,3 @@ function listarClientes()
     }
     return $clientes_list;
 }
-
-/*
-function buscarConsumoAcimaDaMedia()
-{
-    $banco = abrirBanco();
-    // O SQL compara o consumo de cada cliente com a média calculada na hora
-    $sql = "SELECT * FROM cliente 
-            WHERE kwhConsumido > " . calcularMediaDeConsumo() . " ORDER BY kwhConsumido DESC";
-
-    return $banco->query($sql);
-}
-
-function calcularMediaDeConsumo()
-{
-    $banco = abrirBanco();
-    $sql = "SELECT AVG(kwhConsumido) as media FROM cliente";
-    $resultado = $banco->query($sql);
-    $linha = $resultado->fetch_assoc();
-    return $linha['media'];
-}
-
-function totalCliente()
-{
-    $banco = abrirBanco();
-    $sql = "SELECT COUNT(*) as total FROM cliente";
-    $resultado = $banco->query($sql);
-    $linha = $resultado->fetch_assoc();
-    return $linha['total'];
-}
-*/
-
-
-/*function voltarIndex()
-{
-    header("Location:index.php");
-}
-
-
-function voltarConectado()
-{
-    header("Location:conectado.php");
-}
-
-function voltarLoginAnalista()
-{
-    header("Location:analista.php");
-}*/

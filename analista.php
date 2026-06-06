@@ -286,11 +286,14 @@ if (!$dados) {
                                             </form>
                                         </th>
                                         <th>
-                                            <form name="excluir" action="crud_usuarios.php" method="POST">
-                                                <input type="hidden" name="id" value=<?= $usuario["id"] ?> />
-                                                <input type="hidden" name="acao" value="excluir" />
-                                                <button type="submit" name="btn-excluir" class="btn-excluir">Excluir</button>
+                                            <form action="crud_usuarios.php" method="POST">
+                                                <input type="hidden" name="usuario_id" value="<?php echo $usuario['id']; ?>">                                                
+                                                <input type="hidden" name="acao" value="excluir">
+                                                <button type="submit" onclick="return confirm('Deseja mesmo excluir este usuário?')">
+                                                    Excluir
+                                                </button>
                                             </form>
+
                                         </th>
                                     </tr>
                                 <?php }
