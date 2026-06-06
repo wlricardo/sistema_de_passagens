@@ -42,6 +42,34 @@ if ($dados['perfil_id'] != 2) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultor de Vendas - Ambiente operacional</title>
+
+    <style>
+        /* Botão para encerrar sessão */
+        .btn-sair {
+            background-color: #dc3545;
+            /* Vermelho moderno */
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-sair:hover {
+            background-color: #bd2130;
+            /* Vermelho mais escuro */
+        }
+
+        .btn-sair:active {
+            transform: scale(0.98);
+            /* Efeito físico de clique */
+        }
+    </style>
 </head>
 
 <body>
@@ -68,7 +96,13 @@ if ($dados['perfil_id'] != 2) {
                             <span><?php echo htmlspecialchars($dados['nome_perfil'] ?? 'Não definido'); ?></span>
                         </div>
                     </div>
-                    <a href="logout.php" class="btn-sair">Encerrar Sessão</a>
+
+                    <!-- Botão para encerrar sessão -->
+                    <form action="logout.php" method="POST" style="margin: 0; padding: 0;">
+                        <button type="submit" class="btn-sair">
+                            Encerrar Sessão
+                        </button>
+                    </form>
                 </div>
             </aside>
 

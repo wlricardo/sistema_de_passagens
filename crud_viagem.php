@@ -2,19 +2,16 @@
 require_once 'conexao.php';
 
 // Bloco de Roteamento de Ações
-if (isset($_POST["acao"])) {
-    if ($_POST["acao"] == "inserir") {
-        inserirViagem();
+// Verifica se a requisição foi feita direto para este arquivo (POST do formulário)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["acao"]) && basename($_SERVER['PHP_SELF']) == 'crud_viagem.php') {
+    if ($_POST["acao"] == "inserir") { 
+        inserirViagem(); 
     }
-    if ($_POST["acao"] == "alterar") {
-        alterarViagem();
+    if ($_POST["acao"] == "alterar") { 
+        alterarViagem(); 
     }
-    if ($_POST["acao"] == "excluir") {
-        excluirViagem();
-    }
-    if ($_POST["acao"] == "cancelar") {
-        header("Location:analista.php");
-        exit();
+    if ($_POST["acao"] == "excluir") { 
+        excluirViagem(); 
     }
 }
 

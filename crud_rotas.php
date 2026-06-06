@@ -1,10 +1,17 @@
 <?php
 require_once 'conexao.php';
 
-if (isset($_POST["acao"])) {
-    if ($_POST["acao"] == "inserir") { inserirRota(); }
-    if ($_POST["acao"] == "alterar") { alterarRota(); }
-    if ($_POST["acao"] == "excluir") { excluirRota(); }
+// CORREÇÃO: Verifica se a requisição foi feita direto para este arquivo (POST do formulário)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["acao"]) && basename($_SERVER['PHP_SELF']) == 'crud_rotas.php') {
+    if ($_POST["acao"] == "inserir") { 
+        inserirRota(); 
+    }
+    if ($_POST["acao"] == "alterar") { 
+        alterarRota(); 
+    }
+    if ($_POST["acao"] == "excluir") { 
+        excluirRota(); 
+    }
 }
 
 function inserirRota() {
@@ -20,6 +27,7 @@ function inserirRota() {
     $banco->query($sql);
     $banco->close();
     header("Location:vendas.php");
+    exit();
 }
 
 function alterarRota() {
@@ -35,6 +43,7 @@ function alterarRota() {
     $banco->query($sql);
     $banco->close();
     header("Location:vendas.php");
+    exit();
 }
 
 function excluirRota() {
@@ -44,6 +53,7 @@ function excluirRota() {
     $banco->query($sql);
     $banco->close();
     header("Location:vendas.php");
+    exit();
 }
 
 function selecionarRotaId($id) {

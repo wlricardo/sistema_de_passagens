@@ -4,7 +4,7 @@ require_once 'conexao.php';
 if (isset($_POST["acao"])) {
     if ($_POST["acao"] == "inserir") {
         inserirUsuario();
-        }
+    }
     if ($_POST["acao"] == "alterar") {
         alterarUsuario();
     }
@@ -25,7 +25,7 @@ function inserirUsuario()
     $nome      = $banco->real_escape_string($_POST["nome"]);
     $login     = $banco->real_escape_string($_POST["login"]);
     $senha     = md5($banco->real_escape_string($_POST["senha"]));
-    
+
     // Captura o ID do perfil selecionado no menu suspenso (1, 2 ou 3)
     $perfil_id = $banco->real_escape_string($_POST["perfil_id"]);
 
@@ -42,10 +42,22 @@ function inserirUsuario()
 function excluirUsuario()
 {
     $banco = abrirBanco();
+    $id_usuario = $banco->real_escape_string($_POST["usuario_id"]);
+
+    // Em vez de deletar, removemos o perfil de Vendedor/Gerente mudando para algo neutro
+    $sql_usuario = "UPDATE usuario SET perfil_id = NULL WHERE id = '{$id_usuario}'";
+    $banco->query($sql_usuario);
+
+    $banco->close();
+
+    header("Location: analista.php");
+    exit();
+
+    /*$banco = abrirBanco();
     $sql = "delete from usuario where id='{$_POST["id"]}'";
     $banco->query($sql);
     $banco->close();
-    voltarLoginAnalista();
+    voltarLoginAnalista();*/
 }
 
 function selecionarUsuarioId($id)
@@ -104,19 +116,19 @@ function listarUsuarios()
 {
     $usuarios_list = [];
     $banco = abrirBanco();
-    
+
     // Exibe lista de usuários com o nome do perfil, usando JOIN para relacionar as tabelas usuario e perfil
     $sql = "SELECT usuario.*, perfil.nome AS nome_perfil 
             FROM usuario 
             INNER JOIN perfil ON usuario.perfil_id = perfil.id 
             ORDER BY usuario.nome";
-            
+
     $resultado = $banco->query($sql);
-    
+
     while ($row = mysqli_fetch_array($resultado)) {
         $usuarios_list[] = $row;
     }
-    
+
     $banco->close();
     return $usuarios_list;
 }

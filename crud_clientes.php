@@ -17,48 +17,57 @@ if (isset($_POST["acao"])) {
     }
 }
 
-/* function abrirBanco()
-{
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db_name = "sistema_venda_passagens";
-
-    $conexao = new mysqli($servername, $username, $password, $db_name);
-    return $conexao;
-}*/
-
 function inserirCliente()
 {
     $banco = abrirBanco();
 
-    $nome = $banco->real_escape_string($_POST["nome"]);
-    $cpf = $banco->real_escape_string($_POST["cpf"]);
+    $nome  = $banco->real_escape_string($_POST["nome"]);
+    $cpf   = $banco->real_escape_string($_POST["cpf"]);
     $email = $banco->real_escape_string($_POST["email"]);
     $login = $banco->real_escape_string($_POST["login"]);
     $senha = md5($banco->real_escape_string($_POST["senha"]));
 
-    $sql = "INSERT INTO cliente(nome, cpf, email, login, senha)" . " VALUES 
-            ('$nome','$cpf','$email','$login','$senha')";
+    $sql = "INSERT INTO cliente(nome, cpf, email, login, senha) 
+            VALUES ('$nome', '$cpf', '$email', '$login', '$senha')";
 
     $banco->query($sql);
     $banco->close();
 
-    // Se o perfil logado for o 2 (Vendas), vai para vendas.php, senão volta para analista.php
-    $pagina_retorno = ($_SESSION['perfil_id'] == 2) ? "vendas.php" : "analista.php";
-    header("Location: vendas.php");
-    exit();;
+    // Verifica qual o perfil logado
+    // Se perfil_id for 2 (Consultor de Vendas), vai para vendas.php. Se for 3 (Analista), vai para analista.php
+    if (isset($_SESSION['perfil_id']) && $_SESSION['perfil_id'] == 2) {
+        header("Location: vendas.php");
+    } else {
+        header("Location: analista.php");
+    }
+    exit();
 }
 
 function excluirCliente()
 {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     $banco = abrirBanco();
-    $sql = "delete from cliente where id='{$_POST["id"]}'";
-    $banco->query($sql);
+
+    // Captura apenas o nome correto e limpo do campo
+    $id_cliente = $banco->real_escape_string($_POST["cliente_id"]);
+
+    // ETAPA 1: Remove as reservas vinculadas a este cliente
+    $sql_reservas = "DELETE FROM reserva WHERE cliente_id = '{$id_cliente}'";
+    $banco->query($sql_reservas);
+
+    // ETAPA 2: Remove o cliente do sistema
+    $sql_cliente = "DELETE FROM cliente WHERE id = '{$id_cliente}'";
+    $banco->query($sql_cliente);
+
     $banco->close();
 
-    // Se o perfil logado for o 2 (Vendas), vai para vendas.php, senão volta para analista.php
-    $pagina_retorno = ($_SESSION['perfil_id'] == 2) ? "vendas.php" : "analista.php";
+    // Redirecionamento baseado no perfil logado
+    $perfil = isset($_SESSION['perfil_id']) ? $_SESSION['perfil_id'] : 3;
+    $pagina_retorno = ($perfil == 2) ? "vendas.php" : "analista.php";
+
     header("Location: " . $pagina_retorno);
     exit();
 }
