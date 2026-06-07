@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/05/2026 às 23:36
+-- Tempo de geração: 07/06/2026 às 19:26
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -77,12 +77,14 @@ INSERT INTO `cliente` (`id`, `nome`, `cpf`, `email`, `login`, `senha`) VALUES
 (8, 'Camila Farias Nunes', '888.999.000-11', 'camila@email.com', 'camila.nunes', '7668f673d5669995175ef91b5d171945'),
 (9, 'Bruno Castro Silva', '999.000.111-22', 'bruno@email.com', 'bruno.castro', '8808a13b854c2563da1a5f6cb2130868'),
 (10, 'Larissa Ramos Duarte', '000.111.222-33', 'larissa@email.com', 'lari.duarte', '990d67a9f94696b1abe2dccf06900322'),
-(11, 'Franciclewdson', '123.000.222-77', 'fran@email.com', 'franci', 'caf1a3dfb505ffed0d024130f58c5cfa'),
-(12, 'Maricleydde', '777.666.111-55', 'macle@mail.com', 'mari', 'caf1a3dfb505ffed0d024130f58c5cfa'),
-(18, 'Viviane', '999.666.333-00', 'vivi@maill.com', 'vivi', '202cb962ac59075b964b07152d234b70'),
-(25, 'Willem Ricardo', '159.753.456-11', 'willem@mail.com', 'willem', '81dc9bdb52d04dc20036dbd8313ed055'),
-(27, 'Giovanna', '444.777.666-00', 'gigi@mail.com', 'gigi', '202cb962ac59075b964b07152d234b70'),
-(28, 'Isabela Hermes', '222.999.444-33', 'bebela@mail.com', 'bela', '202cb962ac59075b964b07152d234b70');
+(25, 'Willem Ricardo', '159.753.456-11', 'willem@mail.com', 'wlricardo', '81dc9bdb52d04dc20036dbd8313ed055'),
+(29, 'Cristiano Ronaldo', '202.020.202-00', 'cr7@gol.com', 'cr7_show', '202cb962ac59075b964b07152d234b70'),
+(30, 'Messi', '030.303.030.33', 'messi@messy.com', 'messi', '81dc9bdb52d04dc20036dbd8313ed055'),
+(31, 'Neymar Jr.', '404.040.404-44', 'menino_ney@bet.com', 'menino_ney', '202cb962ac59075b964b07152d234b70'),
+(32, 'Carlo Ancelotti', '808.080.808-88', 'carlotto@mail.com', 'carlotto', '202cb962ac59075b964b07152d234b70'),
+(34, 'teste3', '741.258.963-01', 'teste3@gmail.com', 't3', '202cb962ac59075b964b07152d234b70'),
+(38, 'teste4', '122.233.344-45', 't4@gmail.com', 'teste4', '81dc9bdb52d04dc20036dbd8313ed055'),
+(39, 'Gus Fring', '333.111.222-99', 'gus@mail.com', 'los_pollos_hermanos', '202cb962ac59075b964b07152d234b70');
 
 -- --------------------------------------------------------
 
@@ -134,7 +136,7 @@ INSERT INTO `perfil` (`id`, `nome`) VALUES
 
 CREATE TABLE `reserva` (
   `id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
   `cliente_id` int(11) NOT NULL,
   `viagem_id` int(11) NOT NULL,
   `data` datetime NOT NULL DEFAULT current_timestamp(),
@@ -148,18 +150,42 @@ CREATE TABLE `reserva` (
 --
 
 INSERT INTO `reserva` (`id`, `usuario_id`, `cliente_id`, `viagem_id`, `data`, `forma_pagamento`, `parcelas`, `valor_pago`) VALUES
-(1, 2, 1, 1, '2026-05-10 10:15:00', 'Pix', 1, 0.00),
-(2, 2, 2, 2, '2026-05-11 11:30:00', 'Cartao', 1, 0.00),
-(3, 2, 3, 3, '2026-05-12 15:45:00', 'Dinheiro', 1, 0.00),
-(4, 2, 4, 4, '2026-05-13 09:20:00', 'Pix', 1, 0.00),
-(5, 2, 5, 5, '2026-05-14 18:00:00', 'Cartao', 1, 0.00),
-(6, 2, 6, 6, '2026-05-15 08:45:00', 'Pix', 1, 0.00),
-(7, 2, 7, 7, '2026-05-16 11:10:00', 'Cartao', 1, 0.00),
-(8, 2, 8, 8, '2026-05-16 14:25:00', 'Dinheiro', 1, 0.00),
-(9, 2, 9, 9, '2026-05-17 16:30:00', 'Pix', 1, 0.00),
-(10, 2, 10, 10, '2026-05-18 19:15:00', 'Cartao', 1, 0.00),
-(11, 2, 9, 9, '2026-05-29 03:59:21', 'Cartao', 6, 600.00),
-(12, 2, 27, 12, '2026-05-30 21:32:56', 'Cartao', 5, 832.00);
+(1, NULL, 1, 1, '2026-05-10 10:15:00', 'Pix', 1, 0.00),
+(2, NULL, 2, 2, '2026-05-11 11:30:00', 'Cartao', 1, 0.00),
+(3, NULL, 3, 3, '2026-05-12 15:45:00', 'Dinheiro', 1, 0.00),
+(4, NULL, 4, 4, '2026-05-13 09:20:00', 'Pix', 1, 0.00),
+(5, NULL, 5, 5, '2026-05-14 18:00:00', 'Cartao', 1, 0.00),
+(6, NULL, 6, 6, '2026-05-15 08:45:00', 'Pix', 1, 0.00),
+(7, NULL, 7, 7, '2026-05-16 11:10:00', 'Cartao', 1, 0.00),
+(8, NULL, 8, 8, '2026-05-16 14:25:00', 'Dinheiro', 1, 0.00),
+(9, NULL, 9, 9, '2026-05-17 16:30:00', 'Pix', 1, 0.00),
+(10, NULL, 10, 10, '2026-05-18 19:15:00', 'Cartao', 1, 0.00),
+(11, NULL, 9, 9, '2026-05-29 03:59:21', 'Cartao', 6, 600.00),
+(13, 5, 30, 10, '2026-06-05 01:46:28', 'Dinheiro', 1, 796.50),
+(14, 5, 29, 10, '2026-06-05 01:47:03', 'Cartao', 2, 885.00),
+(15, 5, 7, 6, '2026-06-05 01:47:33', 'Cartao', 10, 120.00),
+(16, 6, 39, 13, '2026-06-07 16:11:18', 'Dinheiro', 1, 140.40),
+(17, 6, 39, 10, '2026-06-07 16:26:48', 'Pix', 1, 796.50),
+(18, 6, 29, 12, '2026-06-07 16:28:08', 'Cartao', 4, 832.00),
+(19, 5, 1, 13, '2026-06-07 10:15:00', 'Pix', 1, 140.40),
+(20, 5, 2, 1, '2026-06-07 10:30:00', 'Dinheiro', 1, 162.00),
+(21, 5, 3, 6, '2026-06-07 11:00:00', '', 1, 120.00),
+(22, 5, 4, 2, '2026-06-07 11:20:00', 'Pix', 1, 99.00),
+(23, 5, 5, 12, '2026-06-07 12:00:00', 'Dinheiro', 1, 748.80),
+(24, 5, 6, 3, '2026-06-07 13:15:00', '', 1, 225.00),
+(25, 5, 7, 8, '2026-06-07 14:00:00', 'Pix', 1, 236.25),
+(26, 5, 8, 4, '2026-06-07 14:30:00', 'Dinheiro', 1, 607.50),
+(27, 5, 10, 5, '2026-06-07 15:45:00', 'Pix', 1, 702.00),
+(28, 6, 25, 7, '2026-06-07 09:00:00', '', 1, 180.00),
+(29, 6, 29, 9, '2026-06-07 09:30:00', 'Pix', 1, 540.00),
+(30, 6, 30, 1, '2026-06-07 10:00:00', 'Dinheiro', 1, 162.00),
+(31, 6, 31, 13, '2026-06-07 10:45:00', 'Pix', 1, 140.40),
+(32, 6, 32, 2, '2026-06-07 11:15:00', '', 1, 110.00),
+(33, 6, 34, 6, '2026-06-07 11:45:00', 'Dinheiro', 1, 108.00),
+(34, 6, 38, 3, '2026-06-07 12:30:00', '', 1, 225.00),
+(35, 6, 39, 8, '2026-06-07 13:00:00', 'Pix', 1, 236.25),
+(36, 6, 1, 4, '2026-06-07 13:45:00', 'Dinheiro', 1, 607.50),
+(37, 6, 2, 10, '2026-06-07 14:15:00', '', 1, 885.00);
 
 -- --------------------------------------------------------
 
@@ -181,10 +207,10 @@ CREATE TABLE `rota` (
 --
 
 INSERT INTO `rota` (`id`, `nome`, `cidade_origem_id`, `cidade_destino_id`, `tempo_viagem`, `valor_base`) VALUES
-(1, 'São Paulo x Rio de Janeiro', 1, 2, '06:00', 120.00),
+(1, 'São Paulo x Rio de Janeiro', 1, 2, '06:00', 125.00),
 (2, 'Curitiba x São Paulo', 3, 1, '06:30', 110.00),
 (3, 'Fortaleza x Recife', 4, 5, '12:00', 180.00),
-(4, 'Recife x Rio de Janeiro', 5, 2, '42:00', 450.00),
+(4, 'Recife x Rio de Janeiro', 5, 2, '42:00', 452.00),
 (5, 'São Paulo x Fortaleza', 1, 4, '45:00', 520.00),
 (6, 'Rio de Janeiro x São Paulo', 2, 1, '06:00', 120.00),
 (7, 'Recife x Fortaleza', 5, 4, '12:00', 180.00),
@@ -212,10 +238,10 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`, `perfil_id`) VALUES
-(1, 'Adm. Teste', 'admin', '202cb962ac59075b964b07152d234b70', 1),
-(2, 'Vendas Teste', 'user', '202cb962ac59075b964b07152d234b70', 2),
-(3, 'TI Teste', 'ti', 'e00fba6fedfb8a49e13346f7099a23fc', 3),
-(4, 'Willem Ricardo', 'wlricardo', '202cb962ac59075b964b07152d234b70', 3);
+(1, 'Walter White', 'heisenberg', '202cb962ac59075b964b07152d234b70', 1),
+(4, 'Willem Ricardo', 'wlricardo', '12b1e42dc0746f22cf361267de07073f', 3),
+(5, 'Saul Goodman', 'better_call_saul', '202cb962ac59075b964b07152d234b70', 2),
+(6, 'Jesse Pinkman', 'peekaboo', '202cb962ac59075b964b07152d234b70', 2);
 
 -- --------------------------------------------------------
 
@@ -281,7 +307,8 @@ INSERT INTO `viagem` (`id`, `rota_id`, `veiculo_id`, `data`, `valor`) VALUES
 (8, 8, 13, '2026-06-21 17:00:00', 262.50),
 (9, 9, 14, '2026-06-22 23:30:00', 600.00),
 (10, 10, 15, '2026-06-23 05:00:00', 885.00),
-(12, 11, 5, '2026-12-20 00:00:00', 832.00);
+(12, 11, 5, '2026-12-20 00:00:00', 832.00),
+(13, 6, 9, '2026-06-13 00:00:00', 156.00);
 
 --
 -- Índices para tabelas despejadas
@@ -368,7 +395,7 @@ ALTER TABLE `cidade`
 -- AUTO_INCREMENT de tabela `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT de tabela `estado`
@@ -386,7 +413,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de tabela `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de tabela `rota`
@@ -398,7 +425,7 @@ ALTER TABLE `rota`
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `veiculo`
@@ -410,7 +437,7 @@ ALTER TABLE `veiculo`
 -- AUTO_INCREMENT de tabela `viagem`
 --
 ALTER TABLE `viagem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Restrições para tabelas despejadas
