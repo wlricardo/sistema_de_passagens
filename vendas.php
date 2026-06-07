@@ -98,7 +98,7 @@ if ($dados['perfil_id'] != 2) {
         </div>
     </header>
 
-    
+
     <main class="page-content">
         <div class="content-grid">
 
@@ -217,11 +217,11 @@ if ($dados['perfil_id'] != 2) {
                                                 <div style="display: flex; gap: 5px;">
                                                     <!-- Editar Cliente -->
                                                     <form name="alterar" action="alterar_cliente.php" method="POST" style="margin:0;">
-                                                        <input type="hidden" name="id" value="<?= $cliente["id"] ?>" />
+                                                        <input type="hidden" name="cliente_id" value="<?= $cliente["id"] ?>" />
                                                         <input type="hidden" name="origem" value="vendas.php" />
                                                         <button type="submit" name="btn-editar" class="btn-editar">Editar</button>
                                                     </form>
-                                                    <!-- Excluir Cliente (Ajustado para usar cliente_id) -->
+                                                    <!-- Excluir Cliente -->
                                                     <form name="excluir" action="crud_clientes.php" method="POST" style="margin:0;">
                                                         <input type="hidden" name="cliente_id" value="<?= $cliente["id"] ?>" />
                                                         <input type="hidden" name="acao" value="excluir" />

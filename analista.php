@@ -42,7 +42,6 @@ if (!$dados) {
 <html lang="en">
 
 <!-- Cabeçalho HTML e estilos -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,7 +153,7 @@ if (!$dados) {
 <body>
 
     <div class="central-abas">
-        <h3>⚙️ Central de Gerenciamento do Analista</h3>
+        <h3>⚙️ Painel de Controle do Analista</h3>
         <p>Clique abaixo para alternar entre as tabelas de controle do sistema:</p>
         <div class="abas-botoes-container">
             <button class="btn-aba clientes" onclick="alternarAba('aba-clientes', this)">👤 Clientes Cadastrados</button>
