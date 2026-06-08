@@ -1,8 +1,7 @@
 <?php
 require_once 'login.php';
-
-// Importa todos os controladores do sistema 
-include_once 'crud_usuarios.php'; 
+// Importa todos os controladores do sistema
+include_once 'crud_usuarios.php';
 include_once 'crud_veiculos.php';
 include_once 'crud_rotas.php';
 include_once 'crud_cidades.php';
@@ -19,10 +18,10 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 $id = mysqli_real_escape_string($connect, $_SESSION['id_usuario']);
 
 // 2. Obter os dados do usuário e confirmar o perfil
-$sql = "SELECT usuario.nome AS nome_usuario, usuario.perfil_id, perfil.nome AS nome_perfil 
-        FROM usuario 
-        INNER JOIN perfil ON usuario.perfil_id = perfil.id 
-        WHERE usuario.id = '$id'";
+$sql = "SELECT usuario.nome AS nome_usuario, usuario.perfil_id, perfil.nome AS nome_perfil
+FROM usuario
+INNER JOIN perfil ON usuario.perfil_id = perfil.id
+WHERE usuario.id = '$id'";
 $resultado = mysqli_query($connect, $sql);
 $dados = mysqli_fetch_array($resultado);
 
@@ -40,16 +39,14 @@ if ($dados['perfil_id'] != 1) {
     exit();
 }
 
-// Carrega os dados do sistema
-$usuarios_geral = listarUsuarios(); 
+// Carrega os dados do sistema (Apenas para leitura)
+$usuarios_geral = listarUsuarios();
 $veiculos       = listarVeiculos();
 $rotas          = listarRotas();
-$cidades        = listarCidades();
-$viagens        = listarViagens();
 $clientes       = listarClientes();
-$todas_vendas   = listarHistoricoReservas(); // Sem parâmetro: traz o histórico de TODOS
+$todas_vendas   = listarHistoricoReservas(); // Traz o histórico de TODOS
 
-// Lista de Consultores de Vendas 
+// Lista de Consultores de Vendas
 $consultores = array_filter($usuarios_geral, function ($u) {
     return $u['perfil_id'] == 2;
 });
@@ -61,14 +58,13 @@ foreach ($todas_vendas as $venda) {
     $faturamento_total += $venda['valor_pago'];
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Gerente - Relatórios e Auditoria</title>
+    <title>Painel de Relatórios</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -93,6 +89,7 @@ foreach ($todas_vendas as $venda) {
             font-weight: bold;
         }
 
+        /* Cards de Indicadores */
         .grid-cards {
             display: flex;
             gap: 20px;
@@ -123,30 +120,92 @@ foreach ($todas_vendas as $venda) {
             font-weight: bold;
         }
 
-        .section-box {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        /* Sistema de Abas (Mesmo padrão de vendas.php) */
+        .tabs-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
         }
 
+        .tab-btn {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px 5px 0 0;
+            transition: background 0.3s;
+        }
+
+        .tab-btn:hover {
+            background-color: #d5d5d5;
+        }
+
+        .tab-btn.active {
+            background-color: #ffffff;
+            border-bottom: 2px solid #1a237e;
+            color: #1a237e;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-content.active-content {
+            display: block !important;
+        }
+
+        /* Botões de Relatórios (Central) */
         .btn-relatorio {
             background-color: #2e7d32;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 12px 18px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
             text-decoration: none;
             display: inline-block;
+            margin: 5px;
+            transition: background-color 0.2s ease;
         }
 
         .btn-relatorio:hover {
             background-color: #1b5e20;
         }
 
+        .btn-relatorio.azul {
+            background-color: #0277bd;
+        }
+
+        .btn-relatorio.azul:hover {
+            background-color: #01579b;
+        }
+
+        .btn-relatorio.laranja {
+            background-color: #ef6c00;
+        }
+
+        .btn-relatorio.laranja:hover {
+            background-color: #e65100;
+        }
+
+        .btn-relatorio.roxo {
+            background-color: #6a1b9a;
+        }
+
+        .btn-relatorio.roxo:hover {
+            background-color: #4a148c;
+        }
+
+        /* Tabelas de Leitura */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -162,22 +221,41 @@ foreach ($todas_vendas as $venda) {
 
         table th {
             background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .section-box {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ===== FOOTER ===== */
+        .page-footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 13px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- ===== HEADER ===== -->
+    <!-- ===== Header ===== -->
     <header>
         <div>
-            <h1>Painel Estratégico do Gerente</h1>
+            <h1>Painel de Controle do Gerente</h1>
             <p>Bem-vindo, <strong><?= htmlspecialchars($dados['nome_usuario']); ?></strong>!</p>
         </div>
         <a href="logout.php">Encerrar Sessão</a>
     </header>
 
-    <!-- ===== PAINEIS DE DESEMPENHO ===== -->
+    <!-- ===== Indicadores de desempenho ===== -->
     <div class="grid-cards">
         <div class="card money">
             <h4>💰 FATURAMENTO BRUTO TOTAL</h4>
@@ -193,46 +271,36 @@ foreach ($todas_vendas as $venda) {
         </div>
     </div>
 
-    <!-- ===== CENTRAL DE RELATÓRIOS (BOTÕES INSPIRACIONAIS) ===== -->
-    <div class="section-box" style="background-color: #efebe9; border: 1px solid #d7ccc8;">
-        <h3>📊 Central de Inteligência e Relatórios Gerenciais</h3>
-        <p>Clique abaixo para emitir os relatórios analíticos de desempenho da frota e vendas:</p>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <a href="relatorio_faturamento.php" class="btn-relatorio">📈 Relatório Financeiro por Período</a>
-            <a href="ranking_vendedores.php" class="btn-relatorio" style="background-color: #0277bd;">🏆 Ranking de Vendas por Consultor</a>
-            <a href="ranking_rotas.php" class="btn-relatorio" style="background-color: #ef6c00;">🚌 Linhas e Rotas Mais Procuradas</a>
-            <a href="ranking_tipo_de_veiculo.php" class="btn-relatorio" style="background-color: #6a1b9a;">🚌 Taxa de Ocupação por Tipo de Ônibus</a>
+    <!-- ===== Abas de navegação do Painel ===== -->
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="alternarAba(event, 'aba-relatorios')">📊 Relatórios Gerenciais</button>
+        <button class="tab-btn" onclick="alternarAba(event, 'aba-bilhetes')">🎫 Bilhetes Emitidos</button>
+        <button class="tab-btn" onclick="alternarAba(event, 'aba-frota')">🚍 Frota de Veículos</button>
+        <button class="tab-btn" onclick="alternarAba(event, 'aba-rotas')">🗺️ Grade de Rotas</button>
+        <button class="tab-btn" onclick="alternarAba(event, 'aba-consultores')">👥 Consultores</button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ABA 1: RELATÓRIOS                          -->
+    <!-- ========================================== -->
+    <div id="aba-relatorios" class="tab-content active-content">
+        <div class="section-box" style="background-color: #efebe9; border: 1px solid #d7ccc8; margin-bottom: 0;">
+            <h3>📊 Central de Relatórios Gerenciais</h3>
+            <p>Clique abaixo para emitir os relatórios da frota e vendas:</p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                <a href="relatorio_faturamento.php" class="btn-relatorio">📈 Relatório Financeiro por Período</a>
+                <a href="ranking_vendedores.php" class="btn-relatorio azul">🏆 Ranking de Vendas por Consultor</a>
+                <a href="ranking_rotas.php" class="btn-relatorio laranja">🚌 Linhas e Rotas Mais Procuradas</a>
+                <a href="ranking_tipo_de_veiculo.php" class="btn-relatorio roxo"> Taxa de Ocupação por Tipo de Ônibus</a>
+            </div>
         </div>
     </div>
 
-    <!-- ===== VISTA DE AUDITORIA DE TABELAS (APENAS LEITURA) ===== -->
-
-    <!-- 1. CONSULTORES DE VENDAS -->
-    <div class="section-box">
-        <h3>👥 Equipe de Consultores de Vendas Ativos</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome do Consultor</th>
-                    <th>Login no Sistema</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($consultores as $c): ?>
-                    <tr>
-                        <td><?= $c['id'] ?></td>
-                        <td><?= htmlspecialchars($c['nome']) ?></td>
-                        <td><?= htmlspecialchars($c['login']) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- 2. HISTÓRICO DE BILHETES EMITIDOS -->
-    <div class="section-box">
-        <h3>🎫 Últimos Bilhetes Emitidos (Todas as Vendas)</h3>
+    <!-- ========================================== -->
+    <!-- ABA 2: BILHETES EMITIDOS                   -->
+    <!-- ========================================== -->
+    <div id="aba-bilhetes" class="tab-content">
+        <h3> Últimos Bilhetes Emitidos (Todas as Vendas)</h3>
         <table>
             <thead>
                 <tr>
@@ -261,9 +329,11 @@ foreach ($todas_vendas as $venda) {
         </table>
     </div>
 
-    <!-- 3. DETALHAMENTO DA FROTA (VEÍCULOS) -->
-    <div class="section-box">
-        <h3>🚍 Frota de Veículos Cadastrada</h3>
+    <!-- ========================================== -->
+    <!-- ABA 3: FROTA DE VEÍCULOS                   -->
+    <!-- ========================================== -->
+    <div id="aba-frota" class="tab-content">
+        <h3> Frota de Veículos Cadastrada</h3>
         <table>
             <thead>
                 <tr>
@@ -284,9 +354,11 @@ foreach ($todas_vendas as $venda) {
         </table>
     </div>
 
-    <!-- 4. ROTAS E ITINERÁRIOS -->
-    <div class="section-box">
-        <h3>🗺️ Grade de Rotas Autorizadas</h3>
+    <!-- ========================================== -->
+    <!-- ABA 4: ROTAS                               -->
+    <!-- ========================================== -->
+    <div id="aba-rotas" class="tab-content">
+        <h3>️ Grade de Rotas Autorizadas</h3>
         <table>
             <thead>
                 <tr>
@@ -310,6 +382,54 @@ foreach ($todas_vendas as $venda) {
             </tbody>
         </table>
     </div>
+
+    <!-- ========================================== -->
+    <!-- ABA 5: CONSULTORES DE VENDAS               -->
+    <!-- ========================================== -->
+    <div id="aba-consultores" class="tab-content">
+        <h3>👥 Equipe de Consultores de Vendas Ativos</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome do Consultor</th>
+                    <th>Login no Sistema</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($consultores as $c): ?>
+                    <tr>
+                        <td><?= $c['id'] ?></td>
+                        <td><?= htmlspecialchars($c['nome']) ?></td>
+                        <td><?= htmlspecialchars($c['login']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== SCRIPT DE NAVEGAÇÃO POR ABAS ===== -->
+    <script>
+        function alternarAba(evento, idAba) {
+            // 1. Remove o estilo de botão ativo de todos os botões da barra
+            const botoes = document.querySelectorAll('.tab-btn');
+            botoes.forEach(btn => btn.classList.remove('active'));
+
+            // 2. Esconde o conteúdo de todas as abas do painel
+            const conteudos = document.querySelectorAll('.tab-content');
+            conteudos.forEach(conteudo => conteudo.classList.remove('active-content'));
+
+            // 3. Aplica o realce visual apenas no botão que recebeu o clique
+            evento.currentTarget.classList.add('active');
+
+            // 4. Torna visível apenas o bloco de conteúdo correspondente
+            document.getElementById(idAba).classList.add('active-content');
+        }
+    </script>
+    <!-- ===== FOOTER ===== -->
+    <footer class="page-footer">
+        &copy; <?php echo date('Y'); ?> Vá com Deus - Todos os direitos reservados.
+    </footer>
 
 </body>
 

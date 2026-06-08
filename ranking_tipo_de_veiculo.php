@@ -68,7 +68,7 @@ $resultado = $banco->query($sql);
     </div>
 
     <h2>VÁ COM DEUS RODOVIÁRIO - AUDITORIA DE PREFERÊNCIA DE FROTA</h2>
-    <p>Desempenho financeiro por categoria de conforto do ônibus</p>
+    <p>Desempenho por categoria de conforto do ônibus</p>
     <hr>
 
     <table>

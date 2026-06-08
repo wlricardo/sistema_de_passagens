@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07/06/2026 às 19:26
+-- Tempo de geração: 08/06/2026 às 03:58
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -79,11 +79,9 @@ INSERT INTO `cliente` (`id`, `nome`, `cpf`, `email`, `login`, `senha`) VALUES
 (10, 'Larissa Ramos Duarte', '000.111.222-33', 'larissa@email.com', 'lari.duarte', '990d67a9f94696b1abe2dccf06900322'),
 (25, 'Willem Ricardo', '159.753.456-11', 'willem@mail.com', 'wlricardo', '81dc9bdb52d04dc20036dbd8313ed055'),
 (29, 'Cristiano Ronaldo', '202.020.202-00', 'cr7@gol.com', 'cr7_show', '202cb962ac59075b964b07152d234b70'),
-(30, 'Messi', '030.303.030.33', 'messi@messy.com', 'messi', '81dc9bdb52d04dc20036dbd8313ed055'),
+(30, 'Messi', '030.303.030.33', 'messi@messy.com', 'la_pulga', '81dc9bdb52d04dc20036dbd8313ed055'),
 (31, 'Neymar Jr.', '404.040.404-44', 'menino_ney@bet.com', 'menino_ney', '202cb962ac59075b964b07152d234b70'),
 (32, 'Carlo Ancelotti', '808.080.808-88', 'carlotto@mail.com', 'carlotto', '202cb962ac59075b964b07152d234b70'),
-(34, 'teste3', '741.258.963-01', 'teste3@gmail.com', 't3', '202cb962ac59075b964b07152d234b70'),
-(38, 'teste4', '122.233.344-45', 't4@gmail.com', 'teste4', '81dc9bdb52d04dc20036dbd8313ed055'),
 (39, 'Gus Fring', '333.111.222-99', 'gus@mail.com', 'los_pollos_hermanos', '202cb962ac59075b964b07152d234b70');
 
 -- --------------------------------------------------------
@@ -181,11 +179,11 @@ INSERT INTO `reserva` (`id`, `usuario_id`, `cliente_id`, `viagem_id`, `data`, `f
 (30, 6, 30, 1, '2026-06-07 10:00:00', 'Dinheiro', 1, 162.00),
 (31, 6, 31, 13, '2026-06-07 10:45:00', 'Pix', 1, 140.40),
 (32, 6, 32, 2, '2026-06-07 11:15:00', '', 1, 110.00),
-(33, 6, 34, 6, '2026-06-07 11:45:00', 'Dinheiro', 1, 108.00),
-(34, 6, 38, 3, '2026-06-07 12:30:00', '', 1, 225.00),
 (35, 6, 39, 8, '2026-06-07 13:00:00', 'Pix', 1, 236.25),
 (36, 6, 1, 4, '2026-06-07 13:45:00', 'Dinheiro', 1, 607.50),
-(37, 6, 2, 10, '2026-06-07 14:15:00', '', 1, 885.00);
+(37, 6, 2, 10, '2026-06-07 14:15:00', '', 1, 885.00),
+(38, 5, 25, 10, '2026-06-07 21:55:03', 'Cartao', 6, 885.00),
+(40, 5, 39, 4, '2026-06-07 22:26:53', 'Pix', 1, 607.50);
 
 -- --------------------------------------------------------
 
@@ -395,7 +393,7 @@ ALTER TABLE `cidade`
 -- AUTO_INCREMENT de tabela `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT de tabela `estado`
@@ -413,7 +411,7 @@ ALTER TABLE `perfil`
 -- AUTO_INCREMENT de tabela `reserva`
 --
 ALTER TABLE `reserva`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT de tabela `rota`
